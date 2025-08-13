@@ -41,3 +41,24 @@ exports.exportProducts = async (req, res) => {
   res.send(headers + csvData);
 };
 
+
+// Get Products (with filters)
+exports.getProducts = async (req, res) => {
+  const { name, category } = req.query;
+  let query = {};
+  if (name) query.name = { $regex: name, $options: 'i' };
+  if (category) query.category = category;
+
+  const products = await Product.find(query);
+  res.json(products);
+};
+
+
+// Get Inventory History
+exports.getProductHistory = async (req, res) => {
+  const history = await InventoryHistory.find({ productId: req.params.id })
+    .sort({ date: -1 });
+  res.json(history);
+};
+
+
