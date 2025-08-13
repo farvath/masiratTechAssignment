@@ -68,17 +68,22 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// Import CSV
+
+// Import CSV (Vercel/serverless compatible)
+const { Readable } = require('stream');
 exports.importProducts = async (req, res) => {
   const results = [];
   const duplicates = [];
 
-  fs.createReadStream(req.file.path)
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const stream = Readable.from(req.file.buffer);
+
+  stream
     .pipe(csv())
     .on('data', (data) => results.push(data))
     .on('end', async () => {
       let addedCount = 0;
-
       for (let row of results) {
         const exists = await Product.findOne({ name: row.name });
         if (exists) {
@@ -88,7 +93,6 @@ exports.importProducts = async (req, res) => {
           addedCount++;
         }
       }
-
       res.json({ added: addedCount, skipped: duplicates.length, duplicates });
     });
 };
