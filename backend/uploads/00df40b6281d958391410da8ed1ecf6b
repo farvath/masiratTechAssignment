@@ -1,0 +1,6 @@
+name,unit,category,brand,stock,status,image
+Monitor,piece,Electronics,Dell,0,Out_Of_Stock,https://prd.place/600?id=7
+Swim Suit,piece,Clothing,Nike,0,Out_Of_Stock,https://prd.place/600?id=11
+Coffee Mug,piece,Cockery,Taj,0,Out_Of_Stock,https://prd.place/600?id=14
+Ps Vita,piece,Electronics,Samsung,15,In_Stock,https://prd.place/600?id=8
+Telephone,piece,Electronics,Levis,5,In_Stock,https://prd.place/600?id=19

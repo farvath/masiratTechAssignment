@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "./ui/button";
+import ImportResultDialog from "./ImportResultDialog";
 
 export default function ImportExportButtons({ onImportSuccess, importCSV, exportCSV }) {
-  const fileInputRef = React.useRef(null);
+  const fileInputRef = useRef(null);
+  const [importResult, setImportResult] = useState(null);
+  const [showResult, setShowResult] = useState(false);
 
   const handleImportClick = () => {
     if (fileInputRef.current) {
+      fileInputRef.current.value = null;
       fileInputRef.current.click();
     }
   };
@@ -14,11 +18,13 @@ export default function ImportExportButtons({ onImportSuccess, importCSV, export
     const file = e.target.files[0];
     if (file) {
       try {
-        await importCSV(file);
-        alert("CSV imported successfully");
+        const res = await importCSV(file);
+        setImportResult(res.data);
+        setShowResult(true);
         onImportSuccess();
       } catch (err) {
-        alert("Failed to import CSV");
+        setImportResult({ error: "Failed to import CSV" });
+        setShowResult(true);
       }
     }
   };
@@ -39,20 +45,27 @@ export default function ImportExportButtons({ onImportSuccess, importCSV, export
   };
 
   return (
-    <div className="flex gap-4 mb-6 flex-wrap">
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".csv"
-        className="hidden"
-        onChange={onFileChange}
+    <>
+      <div className="flex gap-2 items-center">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          className="hidden"
+          onChange={onFileChange}
+        />
+        <Button onClick={handleImportClick} variant="outline" size="sm">
+          Import CSV
+        </Button>
+        <Button onClick={handleExportClick} variant="outline" size="sm">
+          Export CSV
+        </Button>
+      </div>
+      <ImportResultDialog
+        open={showResult}
+        onClose={() => setShowResult(false)}
+        result={importResult}
       />
-      <Button onClick={handleImportClick} variant="outline">
-        Import CSV
-      </Button>
-      <Button onClick={handleExportClick} variant="outline">
-        Export CSV
-      </Button>
-    </div>
+    </>
   );
 }

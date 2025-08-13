@@ -8,6 +8,7 @@ import {
   exportCSV,
   updateProduct,
   getProductHistory,
+  deleteProduct,
 } from "../api/productsApi";
 
 export default function ProductsPage() {
@@ -19,17 +20,29 @@ export default function ProductsPage() {
   const memoExportCSV = useCallback(exportCSV, []);
   const memoUpdateProduct = useCallback(updateProduct, []);
   const memoGetProductHistory = useCallback(getProductHistory, []);
+  const memoDeleteProduct = useCallback(deleteProduct, []);
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Product Inventory</h1>
-      <SearchBar onSearch={setFilters} />
-      <ImportExportButtons onImportSuccess={() => setFilters({ ...filters })} importCSV={memoImportCSV} exportCSV={memoExportCSV} />
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl font-bold">Product Inventory</h1>
+        <ImportExportButtons 
+          onImportSuccess={() => setFilters({ ...filters })} 
+          importCSV={memoImportCSV} 
+          exportCSV={memoExportCSV} 
+        />
+      </div>
+      
+      <div className="mb-6">
+        <SearchBar onSearch={setFilters} />
+      </div>
+
       <ProductTable
         filters={filters}
         fetchProducts={memoFetchProducts}
         updateProduct={memoUpdateProduct}
         getProductHistory={memoGetProductHistory}
+        deleteProduct={memoDeleteProduct}
       />
     </div>
   );

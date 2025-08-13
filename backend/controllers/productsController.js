@@ -3,6 +3,71 @@ const InventoryHistory = require('../models/InventoryHistory');
 const fs = require('fs');
 const csv = require('csv-parser');
 
+// Get all unique categories
+exports.getCategories = async (req, res) => {
+  try {
+    const categories = await Product.distinct('category');
+    res.json(categories.filter(category => category));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Create new product
+exports.createProduct = async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Delete product
+exports.deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get Products with pagination and sorting
+exports.getProducts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortField = req.query.sortField || 'name';
+    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+    const { name, category } = req.query;
+    
+    let query = {};
+    if (name) query.name = { $regex: name, $options: 'i' };
+    if (category) query.category = category;
+
+    const total = await Product.countDocuments(query);
+    
+    const products = await Product.find(query)
+      .sort({ [sortField]: sortOrder })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      products,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Import CSV
 exports.importProducts = async (req, res) => {
   const results = [];
@@ -42,16 +107,7 @@ exports.exportProducts = async (req, res) => {
 };
 
 
-// Get Products (with filters)
-exports.getProducts = async (req, res) => {
-  const { name, category } = req.query;
-  let query = {};
-  if (name) query.name = { $regex: name, $options: 'i' };
-  if (category) query.category = category;
 
-  const products = await Product.find(query);
-  res.json(products);
-};
 
 
 // Get Inventory History
