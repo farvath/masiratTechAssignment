@@ -16,6 +16,11 @@ connectDB();
 const app = express();
 app.use(corsMiddleware);
 app.use(express.json());
+
+app.get('/', (req, res) => {
+	res.json({ status: 'Backend is running!' });
+});
+
 app.use('/api/products', productRoutes);
 
 app.listen(5000, () => console.log('Server running on port 5000'));
