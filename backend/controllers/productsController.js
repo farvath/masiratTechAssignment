@@ -28,3 +28,16 @@ exports.importProducts = async (req, res) => {
     });
 };
 
+// Export CSV
+exports.exportProducts = async (req, res) => {
+  const products = await Product.find();
+  const headers = 'name,unit,category,brand,stock,status,image\n';
+  const csvData = products.map(p =>
+    `${p.name},${p.unit},${p.category},${p.brand},${p.stock},${p.status},${p.image}`
+  ).join('\n');
+
+  res.header('Content-Type', 'text/csv');
+  res.attachment('products.csv');
+  res.send(headers + csvData);
+};
+
