@@ -181,9 +181,3 @@ masiratTechAssignment/
 ```
 
 ---
-
-## License
-
-This project is for educational/assignment purposes.
-
----
