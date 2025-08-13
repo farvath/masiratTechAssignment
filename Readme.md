@@ -1,8 +1,7 @@
 # Masirat Inventory Management Assignment
 
-A full-stack inventory management system with advanced product CRUD, import/export (CSV), category management, inventory history, and a modern, user-friendly UI.
+A full-stack inventory management system with advanced product CRUD, import/export (CSV), category management, inventory history, and a modern, user-friendly UI. Test the application using the [Link.](https://masirattechnology-assaignment.netlify.app/)
 
----
 
 ## Tech Stack
 
@@ -108,7 +107,7 @@ VITE_FRONTEND_PORT=3000
 ## Local Development Setup
 
 ### Prerequisites
-- Node.js (v18+ recommended)
+- Node.js 
 - MongoDB (local or Atlas)
 
 ### 1. Clone the repository
@@ -179,5 +178,21 @@ masiratTechAssignment/
     package.json
     vite.config.js
 ```
+---
+# Live Application Deployment
+
+### Frontend
+
+* **Deployment Platform:** Netlify
+* **Live URL:** https://masirattechnology-assaignment.netlify.app/
+
+
+
+### Backend
+
+* **Deployment Platform:** Vercel
+* **Live API Endpoint:** https://masirat-tech-assignment.vercel.app/api
+
+
 
 ---
