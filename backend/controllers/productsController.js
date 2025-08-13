@@ -61,4 +61,24 @@ exports.getProductHistory = async (req, res) => {
   res.json(history);
 };
 
+// Update Product + Track Changes
+exports.updateProduct = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) return res.status(404).send('Not found');
+
+  if (req.body.stock !== undefined && req.body.stock !== product.stock) {
+    await InventoryHistory.create({
+      productId: product._id,
+      oldQuantity: product.stock,
+      newQuantity: req.body.stock,
+      updatedBy: req.body.updatedBy || 'system'
+    });
+  }
+
+  Object.assign(product, req.body);
+  await product.save();
+  res.json(product);
+};
+
+
 
