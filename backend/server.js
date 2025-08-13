@@ -1,6 +1,10 @@
+
+require('dotenv').config();
+const corsMiddleware = require('./middleware/corsMiddleware');
+
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
+
 
 const productRoutes = require('./routes/products');
 const connectDB = require('./config/db');

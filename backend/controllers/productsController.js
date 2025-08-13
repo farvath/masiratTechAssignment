@@ -66,19 +66,26 @@ exports.updateProduct = async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) return res.status(404).send('Not found');
 
-  if (req.body.stock !== undefined && req.body.stock !== product.stock) {
-    await InventoryHistory.create({
-      productId: product._id,
-      oldQuantity: product.stock,
-      newQuantity: req.body.stock,
-      updatedBy: req.body.updatedBy || 'system'
-    });
+  // If stock value is being updated, set status accordingly
+  if (req.body.stock !== undefined) {
+    req.body.status = req.body.stock > 0 ? 'In_Stock' : 'Out_Of_Stock';
+
+    // Track stock change history
+    if (req.body.stock !== product.stock) {
+      await InventoryHistory.create({
+        productId: product._id,
+        oldQuantity: product.stock,
+        newQuantity: req.body.stock,
+        updatedBy: req.body.updatedBy || 'system'
+      });
+    }
   }
 
   Object.assign(product, req.body);
   await product.save();
   res.json(product);
 };
+
 
 
 
