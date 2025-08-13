@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Dialog,
@@ -21,6 +21,12 @@ export default function ImportResultDialog({ open, onClose, result }) {
   const [editIdx, setEditIdx] = useState(null);
   const [duplicates, setDuplicates] = useState(result?.duplicates || []);
   const [addedCount, setAddedCount] = useState(result?.added || 0);
+
+  useEffect(() => {
+    setDuplicates(result?.duplicates || []);
+    setAddedCount(result?.added || 0);
+    setEditIdx(null);
+  }, [result]);
 
   if (!result) return null;
 
