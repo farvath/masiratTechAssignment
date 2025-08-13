@@ -81,16 +81,27 @@ All UI is built with **shadcn/ui** components for a modern, consistent look.
 ### Backend (`/backend/.env`)
 Create a `.env` file in the `backend` folder with:
 ```
-MONGO_URI=mongodb://localhost:27017/masirat_inventory
+MONGO_URI=mongodb+srv://farvath456:ranhxxc4pXkxTpbSWLh@cluster0.bzyujyt.mongodb.net
+MONGO_DATABASE_NAME=development
+PORT=5000
+ALLOWED_ORIGINS=http://localhost:3000
 ```
 - `MONGO_URI`: MongoDB connection string.
+- `MONGO_DATABASE_NAME`: MongoDB database name.
+- `PORT`: Port number that will run backend.
+- `ALLOWED_ORIGINS`: comma-separated value that will resolve the cors releated issue.
+  
+
 
 ### Frontend (`/frontend/.env`)
 Create a `.env` file in the `frontend` folder with:
 ```
 VITE_API_BASE_URL=http://localhost:5000/api
+VITE_FRONTEND_PORT=3000
+
 ```
 - `VITE_API_BASE_URL`: Base URL for backend API.
+- `VITE_FRONTEND_PORT`: Port number that will used to run the frontend.
 
 ---
 
